@@ -15,7 +15,7 @@ var tmpl *template.Template
 var timestamp string
 
 func handler(w http.ResponseWriter, r *http.Request) { 
-    tmpl, err := template.ParseFiles("./template.html")
+    tmpl, err := template.ParseFiles("./index.html")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
