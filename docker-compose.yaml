@@ -1,0 +1,35 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres:16.3
+    restart: always
+    env_file: .env
+    environment: 
+      POSTGRES_DB: ${POSTGRES_DB} 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    expose: 
+     - "5432"
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+  blog:
+    container_name: blog
+    env_file: .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+
+volumes:
+  pgdata:
